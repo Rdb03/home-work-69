@@ -1,0 +1,14 @@
+.toolbar {
+    text-align: left;
+    margin: 0;
+    background: cornflowerblue;
+    color: white;
+    padding: 20px 0;
+}
+
+.logo {
+    text-decoration: none;
+    font-size: 40px;
+    color: white;
+    font-weight: bold;
+}

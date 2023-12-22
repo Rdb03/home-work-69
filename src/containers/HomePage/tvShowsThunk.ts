@@ -1,19 +1,31 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import axiosApi from "../../axiosApi.ts";
-import {IApiTVShows, IApiTVShowsList} from "../../type";
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import axiosApi from '../../axiosApi';
+import {IApiTVShows, IApiTVShowsList, ITVShow} from '../../type';
 
 export const fetchTvShows = createAsyncThunk<IApiTVShows[], string>(
-    'tvShows/fetch',
-    async (name) => {
-        const response = await axiosApi.get<IApiTVShowsList| null>(`search/shows?q=${name}`);
-        const tasksResponse = response.data;
-        let tvShows: IApiTVShows[] = [];
+  'tvShows/fetchAll',
+  async (name) => {
+    const response = await axiosApi.get<IApiTVShowsList []>(`search/shows?q=${name}`);
+    const showResponse = response.data;
 
-        if (tasksResponse) {
-            tvShows = Object.keys(tasksResponse).map((id) =>({
-                ...tasksResponse[id],
-                id
-            }));
-        }
-        return tvShows;
-    });
+      return  showResponse.map((item) => {
+        return {
+          id: item.show.id,
+          name: item.show.name,
+        };
+      });
+  });
+
+export const fetchOneTVShow = createAsyncThunk<ITVShow, string>(
+  'tvShow/fetchOne',
+  async (tvShowId) => {
+    const response = await axiosApi.get<ITVShow>(`${tvShowId}`);
+    const data: ITVShow = response.data;
+    return {
+      name: data.name,
+      id: data.id,
+      summary: data.summary,
+      image: data.image,
+    };
+  }
+);

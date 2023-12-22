@@ -1,7 +1,8 @@
 import {ChangeEvent, useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../app/hook.ts';
-import {selectTVShows} from './tvShowsSlice.ts';
-import {fetchTvShows} from "./tvShowsThunk.ts";
+import {useAppDispatch, useAppSelector} from '../../app/hook';
+import {selectTVShows} from './tvShowsSlice';
+import {fetchTvShows} from './tvShowsThunk';
+import {Link, Outlet, useLocation} from 'react-router-dom';
 import './TVShows.css';
 
 const HomePage = () => {
@@ -9,19 +10,26 @@ const HomePage = () => {
     const tvShows = useAppSelector(selectTVShows);
     const [tvShow, setTVShow] = useState('');
     const [show, setShow] = useState(false);
+    const  location = useLocation();
 
     useEffect(() => {
         dispatch(fetchTvShows(tvShow));
     }, [dispatch, tvShow]);
 
     const change = (e: ChangeEvent<HTMLInputElement>) => {
-       setTVShow(e.target.value);
+        setTVShow(e.target.value);
         setShow(true);
     };
 
     const handleSuggestionClick = (suggestion: string) => {
+      if (location.pathname === '/') {
+        setTVShow('');
+      } else if (setTVShow.length > 0) {
+        setTVShow('');
+      } else {
         setShow(false);
         return setTVShow(suggestion);
+      }
     };
 
     return (
@@ -32,25 +40,26 @@ const HomePage = () => {
                     <div>
                         <input
                             className="input-films"
-                            value={tvShow}
+                              value={tvShow}
                             onChange={change}
                             required
                             type="text"
                             autoComplete="off"
                             placeholder="Enter TV Show"
                         />
-                        <button className="search-btn"><i className="fa-solid fa-magnifying-glass"></i></button>
+                        <i className="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    {tvShows && show && tvShow.length > 3 && (
+                    {tvShows && show && tvShow.length > 2 && (
                         <ul className="tvShows-list">
                             {tvShows.map((result) => (
-                                <li key={result.show.id} onClick={() => handleSuggestionClick(result.show.name)}>
-                                    <a className="tvShow-name">{result.show.name}</a>
+                                <li key={result.id} onClick={() => handleSuggestionClick(result.name)}>
+                                    <Link to={`/shows/${result.id}`} className="tvShow-name">{result.name}</Link>
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
+              <Outlet/>
             </div>
         </div>
     );

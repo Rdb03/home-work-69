@@ -1,5 +1,5 @@
-import './ToolBar.css';
 import {NavLink} from "react-router-dom";
+import './ToolBar.css';
 
 const ToolBar = () => {
     return (

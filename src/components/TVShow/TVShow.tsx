@@ -3,8 +3,8 @@ import {useEffect} from 'react';
 import {fetchOneTVShow} from '../../containers/HomePage/tvShowsThunk';
 import {useAppDispatch, useAppSelector} from '../../app/hook';
 import {selectIsLoading, selectTVShow} from '../../containers/HomePage/tvShowsSlice';
-import './TVShow.css';
 import Spinner from '../Spinner/Spinner';
+import './TVShow.css';
 
 const TvShow = () => {
   const dispatch = useAppDispatch();
